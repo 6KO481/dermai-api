@@ -6,7 +6,7 @@ from PIL import Image
 import tensorflow as tf
 from tensorflow import keras
 
-from .config import (
+from config import (
     THREE_PARTITION_CLASSES,
     MALIGNANT_CLASSES,
     KERATINOCYTE_CLASSES,
