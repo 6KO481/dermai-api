@@ -1,0 +1,17 @@
+services:
+  - type: web
+    name: dermai-api
+    env: python
+    region: frankfurt  # ou oregon, singapore selon votre localisation
+    plan: free  # ou starter ($7/mois pour plus de RAM)
+    branch: main
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.9.18
+      - key: TF_CPP_MIN_LOG_LEVEL
+        value: 2
+      - key: PORT
+        fromGroup: web
