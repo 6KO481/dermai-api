@@ -1,6 +1,6 @@
 """
 API FastAPI pour DermAI - Classification de lésions cutanées
-Optimisée pour Railway deployment
+Optimisée pour Render deployment
 """
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
@@ -13,7 +13,7 @@ import io
 import os
 from datetime import datetime
 
-# Import de vos modules (à adapter selon votre structure)
+# Import de vos modules
 try:
     from predictor import EnsembleSkinLesionPredictor
     from config import (
@@ -23,7 +23,6 @@ try:
         APP_METADATA
     )
 except ImportError:
-    # Pour le développement local si structure différente
     import sys
     sys.path.append(os.path.dirname(__file__))
     from predictor import EnsembleSkinLesionPredictor
@@ -38,16 +37,16 @@ app = FastAPI(
     redoc_url="/redoc"
 )
 
-# Configuration CORS pour permettre les appels depuis vos sites/apps
+# Configuration CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # En production, spécifiez vos domaines
+    allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-# Variable globale pour le prédicteur (chargé une seule fois)
+# Variable globale pour le prédicteur
 predictor = None
 
 # Modèles de réponse Pydantic
@@ -105,7 +104,7 @@ async def root():
 
 @app.get("/health", response_model=HealthResponse)
 async def health_check():
-    """Endpoint de santé pour Railway"""
+    """Endpoint de santé pour Render"""
     return {
         "status": "healthy" if predictor is not None else "unhealthy",
         "models_loaded": predictor is not None,
@@ -237,13 +236,15 @@ async def general_exception_handler(request, exc):
     )
 
 
-# Point d'entrée pour Railway
+# Point d'entrée pour Render
 if __name__ == "__main__":
     import uvicorn
+    # Render fournit PORT via variable d'environnement
     port = int(os.environ.get("PORT", 8000))
+    print(f"🚀 Démarrage sur le port {port}")
     uvicorn.run(
-        "main:app",
+        app,  # Passer l'objet app directement, pas la chaîne
         host="0.0.0.0",
         port=port,
-        reload=False  # Désactivé en production
+        reload=False
     )

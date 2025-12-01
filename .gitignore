@@ -23,10 +23,6 @@ wheels/
 .installed.cfg
 *.egg
 
-# Environnement
-.env
-.venv
-
 # IDE
 .vscode/
 .idea/
@@ -34,18 +30,25 @@ wheels/
 *.swo
 *~
 
-# Modèles (si trop gros pour Git)
-# models/*.h5
-# models/*.pkl
-
-# Tests
-.pytest_cache/
-.coverage
-htmlcov/
-
-# Logs
-*.log
+# Environment
+.env
+.env.local
+.env.*.local
 
 # OS
 .DS_Store
 Thumbs.db
+
+# Logs
+*.log
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Examples (si vous ne voulez pas les commiter)
+# examples/
+
+# Ne PAS ignorer les modèles si < 100 Mo
+# models/*.h5
